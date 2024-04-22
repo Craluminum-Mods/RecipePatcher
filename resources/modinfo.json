@@ -1,6 +1,6 @@
 {
     "type": "code",
-    "side": "universal",
+    "side": "server",
     "modid": "recipepatcher",
     "name": "Recipe Patcher",
     "description": "Fast. Flexible. Dream of any JSON patcher. Patches recipes with surgical precision.",

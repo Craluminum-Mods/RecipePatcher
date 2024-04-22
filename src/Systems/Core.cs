@@ -4,7 +4,7 @@ using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.ServerMods;
 
-[assembly: ModInfo(name: "Recipe Patcher", modID: "recipepatcher")]
+[assembly: ModInfo(name: "Recipe Patcher", modID: "recipepatcher", Side = "Server")]
 
 namespace RecipePatcher;
 
