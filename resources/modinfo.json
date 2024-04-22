@@ -1,0 +1,12 @@
+{
+    "type": "code",
+    "side": "universal",
+    "modid": "recipepatcher",
+    "name": "Recipe Patcher",
+    "description": "Fast. Flexible. Dream of any JSON patcher. Patches recipes with surgical precision.",
+    "authors": ["Craluminum2413"],
+    "version": "1.0.0",
+    "dependencies": {
+        "game": "1.19.0"
+    }
+}
