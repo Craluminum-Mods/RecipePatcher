@@ -87,7 +87,7 @@ public class RecipePatchLoader : ModSystem
 
                             if (ingredPatch.AttributesNew != null)
                             {
-                                ingredient.Attributes = ingredPatch.Attributes;
+                                ingredient.Attributes = ingredPatch.AttributesNew;
                             }
                         }
                     }
@@ -122,7 +122,7 @@ public class RecipePatchLoader : ModSystem
 
                             if (ingredPatch.AttributesNew != null)
                             {
-                                ingredient.Attributes = ingredPatch.Attributes;
+                                ingredient.Attributes = ingredPatch.AttributesNew;
                             }
                         }
                     }
@@ -158,7 +158,7 @@ public class RecipePatchLoader : ModSystem
 
                             if (ingredPatch.AttributesNew != null)
                             {
-                                ingredient.Attributes = ingredPatch.Attributes;
+                                ingredient.Attributes = ingredPatch.AttributesNew;
                             }
                         }
                     }
