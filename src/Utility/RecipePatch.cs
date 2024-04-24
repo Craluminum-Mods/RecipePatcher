@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Util;
@@ -21,6 +22,17 @@ public class RecipePatch
     public int Quantity = 0;
     public int QuantityNew = 0;
 
+    public bool MatchAttributes = false;
+    public bool ChangeAttributes = false;
+
+    [JsonProperty]
+    [JsonConverter(typeof(JsonAttributesConverter))]
+    public JsonObject Attributes = null;
+
+    [JsonProperty]
+    [JsonConverter(typeof(JsonAttributesConverter))]
+    public JsonObject AttributesNew = null;
+
     public string OutputCode = null;
     public string OutputCodeNew = null;
     public IngredientPatch[] Ingredients = null;
@@ -32,9 +44,17 @@ public class RecipePatch
 
     public bool MatchesOutput(GridRecipe recipe)
     {
-        return MatchOutputQuantity
-            ? WildcardUtil.Match(GetOutputCode(), recipe.Output.Code) && recipe.Output.Quantity == Quantity
-            : WildcardUtil.Match(GetOutputCode(), recipe.Output.Code);
+        if (Attributes != null && (Attributes.ToString() != recipe.Output.Attributes?.ToString()))
+        {
+            return false;
+        }
+
+        if (MatchOutputQuantity && recipe.Output.Quantity != Quantity)
+        {
+            return false;
+        }
+
+        return WildcardUtil.Match(GetOutputCode(), recipe.Output.Code);
     }
 
     public bool CanApply(ICoreAPI api, int patchIndex, AssetLocation location, ITreeAttribute worldConfig, HashSet<string> loadedModIds)
@@ -51,12 +71,12 @@ public class RecipePatch
                 IAttribute attr = worldConfig[condition.When];
                 if (attr == null)
                 {
-                    api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {0}, patch {1}: Unmet IsValue condition ({2}!={3})", location, patchIndex, condition.IsValue, null);
+                    api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {{0}}, patch {{1}}: Unmet IsValue condition ({{2}}!={{3}})", location, patchIndex, condition.IsValue, null);
                     return false;
                 }
                 else if (!condition.IsValue.Equals(attr.GetValue()?.ToString() ?? "", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {0}, patch {1}: Unmet IsValue condition ({2}!={3})", location, patchIndex, condition.IsValue, attr.GetValue()?.ToString() ?? "");
+                    api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {{0}}, patch {{1}}: Unmet IsValue condition ({{2}}!={{3}})", location, patchIndex, condition.IsValue, attr.GetValue()?.ToString() ?? "");
                     return false;
                 }
             }
@@ -73,7 +93,7 @@ public class RecipePatch
             if (!enabled)
             {
                 string conditions = string.Join(",", DependsOn.Select((PatchModDependence pd) => (pd.invert ? "!" : "") + pd.modid));
-                api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {0}, patch {1}: Unmet DependsOn condition ({2})", location, patchIndex, conditions);
+                api.Logger.VerboseDebug($"{LogPrefix} Recipe patch file {{0}}, patch {{1}}: Unmet DependsOn condition ({{2}})", location, patchIndex, conditions);
                 return false;
             }
         }

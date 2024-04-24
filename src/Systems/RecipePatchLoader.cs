@@ -80,11 +80,16 @@ public class RecipePatchLoader : ModSystem
                 {
                     foreach (IngredientPatch ingredPatch in patch.Ingredients)
                     {
-                        foreach (CraftingRecipeIngredient ingredient in recipe.Ingredients.Where(x => WildcardUtil.Match(ingredPatch.GetIngredientCode(), x.Value.Code)).Select(x => x.Value))
+                        foreach (CraftingRecipeIngredient ingredient in recipe.Ingredients.Where(x => ingredPatch.MatchesIngredient(x.Value)).Select(x => x.Value))
                         {
                             ingredient.Code = ingredPatch.GetCode();
                             ingredient.AllowedVariants = ingredPatch.AllowedVariants;
                             ingredient.SkipVariants = ingredPatch.SkipVariants;
+
+                            if (ingredPatch.AttributesNew != null)
+                            {
+                                ingredient.Attributes = ingredPatch.Attributes;
+                            }
                         }
                     }
                     if (patch.ChangeQuantity)
@@ -95,6 +100,10 @@ public class RecipePatchLoader : ModSystem
                     {
                         recipe.RecipeGroup = (int)patch.RecipeGroup;
                     }
+                    if (patch.AttributesNew != null)
+                    {
+                        recipe.Output.Attributes = patch.AttributesNew;
+                    }
                     newRecipe = null;
                     return true;
                 }
@@ -104,13 +113,18 @@ public class RecipePatchLoader : ModSystem
                     bool any = false;
                     foreach (IngredientPatch ingredPatch in patch.Ingredients)
                     {
-                        foreach (CraftingRecipeIngredient ingredient in newRecipe.Ingredients.Where(x => WildcardUtil.Match(ingredPatch.GetIngredientCode(), x.Value.Code)).Select(x => x.Value))
+                        foreach (CraftingRecipeIngredient ingredient in newRecipe.Ingredients.Where(x => ingredPatch.MatchesIngredient(x.Value)).Select(x => x.Value))
                         {
                             any = true;
                             ingredient.Code = ingredPatch.GetCode();
                             ingredient.Name = ingredPatch.Name;
                             ingredient.AllowedVariants = ingredPatch.AllowedVariants;
                             ingredient.SkipVariants = ingredPatch.SkipVariants;
+
+                            if (ingredPatch.AttributesNew != null)
+                            {
+                                ingredient.Attributes = ingredPatch.Attributes;
+                            }
                         }
                     }
 
@@ -125,6 +139,10 @@ public class RecipePatchLoader : ModSystem
                         {
                             newRecipe.RecipeGroup = (int)patch.RecipeGroup;
                         }
+                        if (patch.AttributesNew != null)
+                        {
+                            newRecipe.Output.Attributes = patch.AttributesNew;
+                        }
                     }
                     return any;
                 }
@@ -134,10 +152,15 @@ public class RecipePatchLoader : ModSystem
                     bool any = false;
                     foreach (IngredientPatch ingredPatch in patch.Ingredients)
                     {
-                        foreach (CraftingRecipeIngredient ingredient in newRecipe.Ingredients.Where(x => WildcardUtil.Match(ingredPatch.GetIngredientCode(), x.Value.Code)).Select(x => x.Value))
+                        foreach (CraftingRecipeIngredient ingredient in newRecipe.Ingredients.Where(x => ingredPatch.MatchesIngredient(x.Value)).Select(x => x.Value))
                         {
                             any = true;
                             ingredient.Code = ingredPatch.GetCode();
+
+                            if (ingredPatch.AttributesNew != null)
+                            {
+                                ingredient.Attributes = ingredPatch.Attributes;
+                            }
                         }
                     }
                     if (patch.RecipeGroup != null)
