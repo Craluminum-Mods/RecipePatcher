@@ -17,13 +17,8 @@ public class RecipePatch
     public PatchCondition[] Conditions = null;
     public PatchModDependence[] DependsOn = null;
 
-    public bool MatchOutputQuantity = false;
-    public bool ChangeQuantity = false;
-    public int Quantity = 0;
-    public int QuantityNew = 0;
-
-    public bool MatchAttributes = false;
-    public bool ChangeAttributes = false;
+    public int? Quantity = null;
+    public int? QuantityNew = null;
 
     [JsonProperty]
     [JsonConverter(typeof(JsonAttributesConverter))]
@@ -49,7 +44,7 @@ public class RecipePatch
             return false;
         }
 
-        if (MatchOutputQuantity && recipe.Output.Quantity != Quantity)
+        if (Quantity != null && recipe.Output.Quantity != Quantity)
         {
             return false;
         }

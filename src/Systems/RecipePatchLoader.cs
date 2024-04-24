@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
-using Vintagestory.API.Util;
 
 namespace RecipePatcher;
 
@@ -92,9 +91,9 @@ public class RecipePatchLoader : ModSystem
                             }
                         }
                     }
-                    if (patch.ChangeQuantity)
+                    if (patch.QuantityNew != null)
                     {
-                        recipe.Output.Quantity = patch.QuantityNew;
+                        recipe.Output.Quantity = (int)patch.QuantityNew;
                     }
                     if (patch.RecipeGroup != null)
                     {
@@ -131,9 +130,9 @@ public class RecipePatchLoader : ModSystem
                     if (any)
                     {
                         newRecipe.Output.Code = patch.GetOutputCodeNew();
-                        if (patch.ChangeQuantity)
+                        if (patch.QuantityNew != null)
                         {
-                            newRecipe.Output.Quantity = patch.QuantityNew;
+                            newRecipe.Output.Quantity = (int)patch.QuantityNew;
                         }
                         if (patch.RecipeGroup != null)
                         {
